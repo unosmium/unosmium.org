@@ -145,7 +145,7 @@
     <% place = t.placings_by_team[tm[:number]][e[:name]][:place] %>
     <td class="event-points"
         data-points="<%= points %>"
-        data-place="<%= place ? place : 999999 %>">
+        data-place="<%= place ? place : 999000 + points %>">
       <div><%= points %></div>
     </td>
   <% end %>
