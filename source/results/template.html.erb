@@ -131,7 +131,11 @@ custom_colors: true
 <tbody>
 <% i.teams.each do |tm| %>
   <tr data-team-number="<%= tm.number %>">
-    <td class="number"><%= tm.number %></td>
+    <td class="number">
+      <a href="#" data-toggle="modal" data-target="#team-detail">
+        <%= tm.number %>
+      </a>
+    </td>
     <td class="team">
       <%= format_school(tm) %>
       <%= tm.suffix %>
@@ -331,6 +335,64 @@ custom_colors: true
            href="../data/<%= File.basename(current_page.path, '.html') + '.yaml' %>">
           Download
         </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="team-detail" tabindex="-1" role="dialog"
+     aria-labelledby="team-detail-label" aria-hidden="true">
+  <div class="modal-dialog" role="form">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="team-detail-label">
+          Team Detail
+        </h5>
+        <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true" style="vertical-align: super">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6>Summary</h6>
+        <p>[team] placed [place] overall with a total score of [points] points at [tournament] on [date]</p>
+        <hr>
+        <div class="table-responsive-sm">
+        <table class="table-striped">
+        <thead>
+          <tr>
+            <th class="event">Event</th>
+            <th class="points">Points</th>
+            <th class="place">Place</th>
+            <th class="notes">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% i.events.each do |e| %>
+          <tr>
+            <td class="event">
+              <%= e.name %>
+              <% if e.trial? %>
+                (Trial)
+              <% elsif e.trialed? %>
+                (Trialed)
+              <% end %>
+            </td>
+            <td class="points"></td>
+            <td class="place"></td>
+            <td class="notes"></td>
+          </tr>
+        <% end %>
+        </tbody>
+        </table>
+        </div>
+        <hr>
+        <h6>Other Results (Coming Soon™)</h6>
+        <p><a href="#">View [school]'s other tournament results</a></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>

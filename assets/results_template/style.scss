@@ -316,6 +316,31 @@ div.results-classic-footnotes {
   }
 }
 
+div#team-detail {
+  table {
+    table-layout: fixed;
+    width: 1em;
+
+    @include media-breakpoint-down(xs) {
+      font-size: 0.8em;
+    }
+
+    th.event { width: 16.5em; }
+    th.points { width: 3em; }
+    th.place { width: 6em; }
+    th.notes { width: 11em; }
+
+    th.points, th.place, td.points, td.place{
+      text-align: center;
+    }
+
+    td {
+      height: 2em;
+      white-space: nowrap;
+    }
+  }
+}
+
 div#print-instructions {
   ul {
     padding-left: 1.5em;
