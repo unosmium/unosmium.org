@@ -354,7 +354,11 @@ custom_colors: true
       </div>
       <div class="modal-body">
         <h6>Summary</h6>
-        <p>[team] placed [place] overall with a total score of [points] points at [tournament] on [date]</p>
+        <p><span id="team">[team]</span> placed <span id="place">[place]</span>
+        overall with a total score of <span id="points">[points]</span> points at the
+        <%= i.tournament.date.year %> <%= tournament_title(i.tournament) %>
+        (Division <%= i.tournament.division %>)
+        held on <%= i.tournament.date.strftime('%A, %B %-d, %Y') %>.</p>
         <hr>
         <div class="table-responsive-sm">
         <table class="table-striped">
@@ -387,7 +391,9 @@ custom_colors: true
         </div>
         <hr>
         <h6>Other Results (Coming Soon™)</h6>
-        <p><a href="#">View [school]'s other tournament results</a></p>
+        <p><a href="#" id="other-results">
+          View <span id="school">[school]</span>'s other tournament results
+        </a></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
