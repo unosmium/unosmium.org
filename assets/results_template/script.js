@@ -251,6 +251,18 @@ $(document).ready(function(){
       }
   });
 
+  // Populate Team Detail table
+  $("td.number a").on("click", function() {
+    let source_row = $(this).closest("tr");
+    let table_rows = $("div#team-detail table tbody").children();
+    $.each(source_row.children("td.event-points"), function (index, td) {
+      let dest_row = table_rows.eq(index);
+      dest_row.children().eq(1).html($(td).attr("data-place"));
+      dest_row.children().eq(2).html($(td).attr("data-points"));
+      console.log(dest_row);
+    });
+  });
+
   // Enable popovers for further explanation of badge abbrevs
   $(function () {
     $('[data-toggle="popover"]').popover()
