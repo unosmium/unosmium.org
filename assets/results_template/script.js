@@ -257,8 +257,11 @@ $(document).ready(function(){
     let table_rows = $("div#team-detail table tbody").children();
     $.each(source_row.children("td.event-points"), function (index, td) {
       let dest_row = table_rows.eq(index);
-      dest_row.children().eq(1).html($(td).attr("data-place"));
-      dest_row.children().eq(2).html($(td).attr("data-points"));
+      dest_row.children().eq(1).html($(td).attr("data-true-points"));
+      let data_place = $(td).attr("data-place");
+      let place = data_place > 999000 ? "n/a" : data_place
+      dest_row.children().eq(2).html(place);
+      dest_row.children().eq(3).html($(td).attr("data-notes"));
       console.log(dest_row);
     });
   });

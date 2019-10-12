@@ -168,6 +168,25 @@ custom_colors: true
     <% unknown = placing.unknown? %>
     <% exempt = placing.exempt? %>
     <td class="event-points"
+        data-true-points="<%= placing.points %>"
+        data-notes="<%=
+          [
+            ('trial event' if placing.event.trial?),
+            ('trialed event' if placing.event.trialed?),
+            ('disqualified' if placing.disqualified?),
+            ('did not participate' if placing.did_not_participate?),
+            ('participation points only' if placing.participation_only?),
+            ('tie' if placing.tie?),
+            ('exempt' if placing.exempt?),
+            ('unknown place' if placing.unknown?),
+            ('placed behind exhibition team'\
+             if placing.considered_for_team_points? && placing.place &&
+                placing.place - placing.points == 1),
+            ('placed behind exhibition teams'\
+             if placing.considered_for_team_points? && placing.place &&
+                placing.place - placing.points > 1),
+          ].compact.join(', ').capitalize
+        %>"
         data-points="<%= unknown ? '??' : points %>"
         data-place="<%= place ? place : 999000 + points %>">
       <div><%= unknown ? '??' : points %><%= '<sup>⬨</sup>' if exempt %></div>
@@ -360,7 +379,7 @@ custom_colors: true
         (Division <%= i.tournament.division %>)
         held on <%= i.tournament.date.strftime('%A, %B %-d, %Y') %>.</p>
         <hr>
-        <div class="table-responsive-sm">
+        <div class="table-responsive-md">
         <table class="table-striped">
         <thead>
           <tr>
@@ -375,11 +394,6 @@ custom_colors: true
           <tr>
             <td class="event">
               <%= e.name %>
-              <% if e.trial? %>
-                (Trial)
-              <% elsif e.trialed? %>
-                (Trialed)
-              <% end %>
             </td>
             <td class="points"></td>
             <td class="place"></td>

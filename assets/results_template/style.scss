@@ -317,6 +317,11 @@ div.results-classic-footnotes {
 }
 
 div#team-detail {
+  div.modal-dialog {
+    max-width: 42rem;
+    width: calc(100% - 1rem * 2);
+  }
+
   table {
     table-layout: fixed;
     width: 1em;
@@ -328,7 +333,7 @@ div#team-detail {
     th.event { width: 16.5em; }
     th.points { width: 3em; }
     th.place { width: 6em; }
-    th.notes { width: 11em; }
+    th.notes { width: 19em; }
 
     th.points, th.place, td.points, td.place{
       text-align: center;
