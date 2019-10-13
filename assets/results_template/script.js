@@ -281,6 +281,12 @@ $(document).ready(function(){
     });
   });
 
+  // Give small message about other results not yet being implemented
+  $("#other-results").on("click", function(e) {
+    e.preventDefault();
+    alert("Not yet implemented, coming soon™ 🎉")
+  });
+
   // Enable popovers for further explanation of badge abbrevs
   $(function () {
     $('[data-toggle="popover"]').popover()
