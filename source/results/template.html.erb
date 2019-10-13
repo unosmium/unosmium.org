@@ -134,7 +134,8 @@ custom_colors: true
       data-school="<%= tm.school %>"
       data-team-name="<%= full_team_name(tm) %>">
     <td class="number">
-      <a href="#" data-toggle="modal" data-target="#team-detail">
+      <a href="?team=<%= tm.number %>"
+         data-toggle="modal" data-target="#team-detail">
         <%= tm.number %>
       </a>
     </td>
