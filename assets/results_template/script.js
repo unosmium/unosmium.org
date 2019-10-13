@@ -243,7 +243,7 @@ $(document).ready(function(){
   $("div#medal-filter input").change(function() {
       let medal_number = $(this).attr("id").slice("medal".length);
       let medals = $("td[data-points='" + medal_number + "'] div")
-      
+
       if ($(this).prop("checked")) {
         medals.removeAttr("style"); // default state is 'highlighted'
       } else {
@@ -251,9 +251,25 @@ $(document).ready(function(){
       }
   });
 
-  // Populate Team Detail table
+  // Cribbed from https://git.io/Je8kk
+  function getOrdinal(n) {
+    let s = ["th", "st", "nd", "rd"],
+    v = n%100;
+    return n+(s[(v-20)%10]||s[v]||s[0]);
+  }
+
+  // Populate Team Detail table and rest of modal
   $("td.number a").on("click", function() {
     let source_row = $(this).closest("tr");
+    let points = source_row.children("td.total-points").text();
+    let place = source_row.children("td.rank").attr("data-points");
+
+    $("div#team-detail span#number").html($(this).text());
+    $("div#team-detail span#points").html(points);
+    $("div#team-detail span#place").html(getOrdinal(place));
+    $("div#team-detail span#team").html(source_row.attr("data-team-name"));
+    $("div#team-detail span#school").html(source_row.attr("data-school"));
+
     let table_rows = $("div#team-detail table tbody").children();
     $.each(source_row.children("td.event-points"), function (index, td) {
       let dest_row = table_rows.eq(index);
@@ -262,7 +278,6 @@ $(document).ready(function(){
       let place = data_place > 999000 ? "n/a" : data_place
       dest_row.children().eq(2).html(place);
       dest_row.children().eq(3).html($(td).attr("data-notes"));
-      console.log(dest_row);
     });
   });
 

@@ -130,7 +130,9 @@ custom_colors: true
 </thead>
 <tbody>
 <% i.teams.each do |tm| %>
-  <tr data-team-number="<%= tm.number %>">
+  <tr data-team-number="<%= tm.number %>"
+      data-school="<%= tm.school %>"
+      data-team-name="<%= full_team_name(tm) %>">
     <td class="number">
       <a href="#" data-toggle="modal" data-target="#team-detail">
         <%= tm.number %>
@@ -364,7 +366,7 @@ custom_colors: true
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="team-detail-label">
-          Team Detail
+          Details for Team <span id="number">[number]</span>
         </h5>
         <button type="button" class="close" data-dismiss="modal"
                 aria-label="Close">
@@ -406,7 +408,7 @@ custom_colors: true
         <hr>
         <h6>Other Results (Coming Soon™)</h6>
         <p><a href="#" id="other-results">
-          View <span id="school">[school]</span>'s other tournament results
+          View other tournament results for <span id="school">[school]</span>
         </a></p>
       </div>
       <div class="modal-footer">
