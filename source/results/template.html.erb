@@ -131,7 +131,7 @@ custom_colors: true
 <tbody>
 <% i.teams.each do |tm| %>
   <tr data-team-number="<%= tm.number %>"
-      data-school="<%= tm.school %>"
+      data-school="<%= full_school_name(tm) %>"
       data-team-name="<%= full_team_name(tm) %>">
     <td class="number">
       <a href="?team=<%= tm.number %>"
@@ -406,7 +406,7 @@ custom_colors: true
         <hr>
         <h6>Other Results (Coming Soon™)</h6>
         <p><a href="#" id="other-results">
-          View other tournament results for <span id="school">[school]</span>
+          View results for <span id="school">[school]</span> in other tournaments
         </a></p>
       </div>
       <div class="modal-footer">

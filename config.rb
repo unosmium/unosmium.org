@@ -193,6 +193,13 @@ helpers do
           .sub('Secondary School', 'Secondary')
   end
 
+  def full_school_name(team)
+    location = if team.city then "(#{team.city}, #{team.state})"
+               else              "(#{team.state})"
+               end
+    [team.school, location].join(' ')
+  end
+
   def full_team_name(team)
     location = if team.city then "(#{team.city}, #{team.state})"
                else              "(#{team.state})"
