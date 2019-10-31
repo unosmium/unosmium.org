@@ -179,6 +179,12 @@ table.results-classic {
     cursor: pointer;
   }
 
+  td.team {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
   td.event-points[data-points='1'] div,
   td.event-points-focus[data-points='1'] div,
   td.rank[data-points='1'] div {
