@@ -25,16 +25,19 @@
 @import "~daemonite-material/assets/scss/material/text-field";
 @import "~daemonite-material/assets/scss/material/snackbar";
 
-html,
-body {
-  position: fixed;
-  overflow: hidden;
+html.stop-ios-overscroll {
+  &, body {
+    position: fixed;
+    overflow: hidden;
+  }
 }
 
 div.results-classic-wrapper {
   // make sticky stuff work
   overflow: auto;
   height: 100vh;
+  // for overscroll prevention
+  width: 100vw;
   // always show scrollbar area on Firefox for layout consistenty when filtering
   overflow-y: scroll;
   // ensure that the first four table columns are always visible, even on small
