@@ -25,6 +25,11 @@
 @import "~daemonite-material/assets/scss/material/text-field";
 @import "~daemonite-material/assets/scss/material/snackbar";
 
+html,
+body {
+  position: fixed;
+  overflow: hidden;
+}
 
 div.results-classic-wrapper {
   // make sticky stuff work
