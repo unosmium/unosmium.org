@@ -59,7 +59,7 @@ $(document).ready(function(){
   // First, make sure all default checkboxes are checked initially (browser
   // might tend to remember previous state and it's not apparent to the user
   // that the boxes would be unchecked without going into the menu)
-  $("div#filters input").prop("checked", true);
+  $("div#filters input:checkbox").prop("checked", true);
 
   // Correct minimum width of header and footnotes based on number of events
   var fix_width = function(extra) {

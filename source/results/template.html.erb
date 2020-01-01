@@ -28,7 +28,7 @@ custom_colors: true
     <div class="tournament-info">
       <h1>
         <%= i.tournament.year %>
-        <%= tournament_title(i.tournament) %>&nbsp;(Div. <%= i.tournament.division %>)
+        <%= tournament_title(i.tournament) %>&nbsp;(Div. <%= i.tournament.division %><%= ' <span id="subdivision">Overall</span>' if i.tournament.subdivisions? %>)
       </h1>
       <p><%= i.tournament.date.strftime('%A, %B %-d, %Y') %>
          @ <span style="white-space: nowrap;"><%= i.tournament.location %></span></p>
@@ -130,7 +130,7 @@ custom_colors: true
 <% i.teams.each do |tm| %>
   <tr data-team-number="<%= tm.number %>"
       data-school="<%= full_school_name(tm) %>"
-      data-team-name="<%= full_team_name(tm) %>">
+      data-team-name="<%= full_team_name(tm) %>"<%= " data-subdivision=\"#{tm.subdivision}\"" if tm.subdivision %>>
     <td class="number">
       <a href="?team=<%= tm.number %>"
          data-toggle="modal" data-target="#team-detail">
@@ -197,6 +197,11 @@ custom_colors: true
         %>"
         data-points="<%= unknown ? '??' : points %>"
         data-place="<%= unknown && placing.points_limited_by_maximum_place? ? "≥#{i.tournament.maximum_place}" : place %>"
+      <% if i.tournament.subdivisions? %>
+        data-sub-true-points="<%= placing.subdivision.points %>"
+        data-sub-points="<%= placing.subdivision.unknown? ? '??' : placing.subdivision.isolated_points %>"
+        data-sub-place="<%= placing.subdivision.place %>"
+      <% end %>
         data-sortable-place="<%= place ? place : (unknown ? 998000 + points : 999000 + points) %>">
       <div><%= unknown && !placing.points_limited_by_maximum_place? ? '??' : points %><%= sup_tag(placing) %></div>
     </td>
@@ -241,6 +246,24 @@ custom_colors: true
         </button>
       </div>
       <div class="modal-body">
+      <% if i.tournament.subdivisions? %>
+        <h6>Select which subdivision to show</h6>
+        <div>
+          <input type="radio" id="sub-overall" name="subdivision" checked>
+          <label class="custom-control-label" for="sub-overall">
+            Overall (combined)
+          </label>
+        </div>
+      <% i.tournament.subdivisions.each do |s, _| %>
+        <div>
+          <input type="radio" id="sub-<%= s %>" name="subdivision">
+          <label class="custom-control-label" for="sub-<%= s %>">
+            <%= s %>
+          </label>
+        </div>
+      <% end %>
+        <hr>
+      <% end %>
         <h6>Select which medals to highlight</h6>
         <div id="medal-filter">
       <% (1..6).each do |x| %>
