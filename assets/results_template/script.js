@@ -236,6 +236,14 @@ $(document).ready(function(){
     let rows = $("tr[data-subdivision]");
     if (sub === "overall") {
       rows.show();
+
+      $.each($("td.event-points"), function(index, cell) {
+        $(cell).attr("data-points", $(cell).attr("data-o-points"));
+        $(cell).attr("data-true-points", $(cell).attr("data-o-true-points"));
+        $(cell).attr("data-place", $(cell).attr("data-o-place"));
+        $(cell).children("div").contents().get(0).nodeValue = $(cell).attr("data-points");
+      });
+
     } else {
       $.each(rows, function(index, row) {
         if ($(row).attr("data-subdivision") === sub) {
@@ -244,7 +252,15 @@ $(document).ready(function(){
           $(row).hide();
         }
       });
+
+      $.each($("td.event-points"), function(index, cell) {
+        $(cell).attr("data-points", $(cell).attr("data-sub-points"));
+        $(cell).attr("data-true-points", $(cell).attr("data-sub-true-points"));
+        $(cell).attr("data-place", $(cell).attr("data-sub-place"));
+        $(cell).children("div").contents().get(0).nodeValue = $(cell).attr("data-points");
+      });
     }
+    sort_and_toggle_event_rank(); // sort again after filtering b/c bad coupling
   };
   $("input[type=radio][name=subdivision]").change(filter_subdivision);
   filter_subdivision();
