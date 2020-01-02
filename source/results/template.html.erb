@@ -28,7 +28,7 @@ custom_colors: true
     <div class="tournament-info">
       <h1>
         <%= i.tournament.year %>
-        <%= tournament_title(i.tournament) %>&nbsp;(Div. <%= i.tournament.division %><%= ' <span id="subdivision">Overall</span>' if i.tournament.subdivisions? %>)
+        <%= tournament_title(i.tournament) %>&nbsp;(Div. <%= i.tournament.division %><%= '-<span id="subdivision">Overall</span>' if i.tournament.subdivisions? %>)
       </h1>
       <p><%= i.tournament.date.strftime('%A, %B %-d, %Y') %>
          @ <span style="white-space: nowrap;"><%= i.tournament.location %></span></p>
@@ -167,8 +167,8 @@ custom_colors: true
     <% end %>
     </td>
     <td class="event-points-focus" data-points=""><div></div></td>
-    <td class="rank" data-points="<%= tm.rank %>"<%= " data-sub-points=\"#{tm.subdivision_team.rank}\"" if i.tournament.subdivisions? %>><div><%= tm.rank %></div></td>
-    <td class="total-points"<%= " data-sub-points=\"#{tm.subdivision_team.points}\"" if i.tournament.subdivisions? %>><%= tm.points %></td>
+    <td class="rank" data-points="<%= tm.rank %>"<%= " data-o-points=\"#{tm.rank}\" data-sub-points=\"#{tm.subdivision_team.rank}\"" if i.tournament.subdivisions? %>><div><%= tm.rank %></div></td>
+    <td class="total-points"<%= " data-o-points=\"#{tm.points}\" data-sub-points=\"#{tm.subdivision_team.points}\"" if i.tournament.subdivisions? %>><%= tm.points %></td>
   <% i.events.each do |e| %>
     <% placing = e.placing_for(tm) %>
     <% points = placing.isolated_points %>

@@ -243,6 +243,14 @@ $(document).ready(function(){
         $(cell).attr("data-place", $(cell).attr("data-o-place"));
         $(cell).children("div").contents().get(0).nodeValue = $(cell).attr("data-points");
       });
+      $.each($("td.rank"), function(index, cell) {
+        $(cell).attr("data-points", $(cell).attr("data-o-points"));
+        $(cell).children("div").html($(cell).attr("data-points"));
+      });
+      $.each($("td.total-points"), function(index, cell) {
+        $(cell).html($(cell).attr("data-o-points"));
+      });
+      $("#subdivision").html("Overall");
 
     } else {
       $.each(rows, function(index, row) {
@@ -259,6 +267,14 @@ $(document).ready(function(){
         $(cell).attr("data-place", $(cell).attr("data-sub-place"));
         $(cell).children("div").contents().get(0).nodeValue = $(cell).attr("data-points");
       });
+      $.each($("td.rank"), function(index, cell) {
+        $(cell).attr("data-points", $(cell).attr("data-sub-points"));
+        $(cell).children("div").html($(cell).attr("data-sub-points"));
+      });
+      $.each($("td.total-points"), function(index, cell) {
+        $(cell).html($(cell).attr("data-sub-points"));
+      });
+      $("#subdivision").html(sub);
     }
     sort_and_toggle_event_rank(); // sort again after filtering b/c bad coupling
   };
