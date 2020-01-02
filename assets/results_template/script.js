@@ -230,6 +230,25 @@ $(document).ready(function(){
     $("#sort-select").change();
   });
 
+  // Filter and toggle displayed data based on subdivision radio buttons
+  let filter_subdivision = function() {
+    let sub = $("input[type=radio][name=subdivision]:checked").attr("id").substring(4);
+    let rows = $("tr[data-subdivision]");
+    if (sub === "overall") {
+      rows.show();
+    } else {
+      $.each(rows, function(index, row) {
+        if ($(row).attr("data-subdivision") === sub) {
+          $(row).show();
+        } else {
+          $(row).hide();
+        }
+      });
+    }
+  };
+  $("input[type=radio][name=subdivision]").change(filter_subdivision);
+  filter_subdivision();
+
   // Toggle rows based on checkboxes
   $("div#team-filter input").change(function() {
     let id = $(this).attr("id");

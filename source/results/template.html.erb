@@ -167,8 +167,8 @@ custom_colors: true
     <% end %>
     </td>
     <td class="event-points-focus" data-points=""><div></div></td>
-    <td class="rank" data-points="<%= tm.rank %>"><div><%= tm.rank %></div></td>
-    <td class="total-points"><%= tm.points %></td>
+    <td class="rank" data-points="<%= tm.rank %>"<%= " data-sub-points=\"#{tm.subdivision_team.rank}\"" if i.tournament.subdivisions? %>><div><%= tm.rank %></div></td>
+    <td class="total-points"<%= " data-sub-points=\"#{tm.subdivision_team.points}\"" if i.tournament.subdivisions? %>><%= tm.points %></td>
   <% i.events.each do |e| %>
     <% placing = e.placing_for(tm) %>
     <% points = placing.isolated_points %>
@@ -198,9 +198,13 @@ custom_colors: true
         data-points="<%= unknown ? '??' : points %>"
         data-place="<%= unknown && placing.points_limited_by_maximum_place? ? "≥#{i.tournament.maximum_place}" : place %>"
       <% if i.tournament.subdivisions? %>
-        data-sub-true-points="<%= placing.subdivision.points %>"
-        data-sub-points="<%= placing.subdivision.unknown? ? '??' : placing.subdivision.isolated_points %>"
-        data-sub-place="<%= placing.subdivision.place %>"
+        data-o-true-points="<%= placing.points %>"
+        data-o-points="<%= unknown ? '??' : points %>"
+        data-o-place="<%= unknown && placing.points_limited_by_maximum_place? ? "≥#{i.tournament.maximum_place}" : place %>"
+        <% sp = placing.subdivision_placing %>
+        data-sub-true-points="<%= sp.points %>"
+        data-sub-points="<%= sp.unknown? ? '??' : sp.isolated_points %>"
+        data-sub-place="<%= sp.place %>"
       <% end %>
         data-sortable-place="<%= place ? place : (unknown ? 998000 + points : 999000 + points) %>">
       <div><%= unknown && !placing.points_limited_by_maximum_place? ? '??' : points %><%= sup_tag(placing) %></div>
