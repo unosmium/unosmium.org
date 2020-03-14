@@ -184,11 +184,13 @@ custom_colors: true
         data-o-notes="<%= placing_notes(placing) %>"
         data-o-points="<%= unknown ? '??' : points %>"
         data-o-place="<%= unknown && placing.points_limited_by_maximum_place? ? "≥#{i.tournament.maximum_place}" : place %>"
+        data-o-sup-tag="<%= sup_tag(placing) %>"
         <% sp = placing.subdivision_placing %>
         data-sub-true-points="<%= sp.points %>"
         data-sub-notes="<%= placing_notes(sp) %>"
         data-sub-points="<%= sp.unknown? ? '??' : sp.isolated_points %>"
         data-sub-place="<%= sp.place %>"
+        data-sub-sup-tag="<%= sup_tag(sp) %>"
       <% end %>
         data-sortable-place="<%= place ? place : (unknown ? 998000 + points : 999000 + points) %>">
       <div><%= unknown && !placing.points_limited_by_maximum_place? ? '??' : points %><%= sup_tag(placing) %></div>
