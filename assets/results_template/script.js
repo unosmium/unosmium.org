@@ -240,6 +240,7 @@ $(document).ready(function(){
       $.each($("td.event-points"), function(index, cell) {
         $(cell).attr("data-points", $(cell).attr("data-o-points"));
         $(cell).attr("data-true-points", $(cell).attr("data-o-true-points"));
+        $(cell).attr("data-notes", $(cell).attr("data-o-notes"));
         $(cell).attr("data-place", $(cell).attr("data-o-place"));
         $(cell).children("div").contents().get(0).nodeValue = $(cell).attr("data-points");
       });
@@ -264,6 +265,7 @@ $(document).ready(function(){
       $.each($("td.event-points"), function(index, cell) {
         $(cell).attr("data-points", $(cell).attr("data-sub-points"));
         $(cell).attr("data-true-points", $(cell).attr("data-sub-true-points"));
+        $(cell).attr("data-notes", $(cell).attr("data-sub-notes"));
         $(cell).attr("data-place", $(cell).attr("data-sub-place"));
         $(cell).children("div").contents().get(0).nodeValue = $(cell).attr("data-points");
       });

@@ -259,4 +259,26 @@ module CustomHelpers
         .each { |row| csv << row }
     end
   end
+
+  def placing_notes(placing)
+    place = placing.place
+    points = placing.isolated_points
+    [
+      ('trial event' if placing.event.trial?),
+      ('trialed event' if placing.event.trialed?),
+      ('disqualified' if placing.disqualified?),
+      ('did not participate' if placing.did_not_participate?),
+      ('participation points only' if placing.participation_only?),
+      ('tie' if placing.tie?),
+      ('exempt' if placing.exempt?),
+      ('points limited' if placing.points_limited_by_maximum_place?),
+      ('unknown place' if placing.unknown?),
+      ('placed behind exhibition team'\
+       if placing.points_affected_by_exhibition? && place - points == 1),
+      ('placed behind exhibition teams'\
+       if placing.points_affected_by_exhibition? && place - points > 1),
+      ('dropped'\
+       if placing.dropped_as_part_of_worst_placings?),
+    ].compact.join(', ').capitalize
+  end
 end
