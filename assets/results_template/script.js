@@ -235,7 +235,7 @@ $(document).ready(function(){
   let filter_subdivision = function() {
     let sub = $("input[type=radio][name=subdivision]:checked").attr("id").substring(4);
     let rows = $("tr[data-subdivision]");
-    if (sub === "overall") {
+    if (sub === "combined") {
       rows.show();
 
       $.each($("td.event-points"), function(index, cell) {
@@ -253,7 +253,7 @@ $(document).ready(function(){
       $.each($("td.total-points"), function(index, cell) {
         $(cell).html($(cell).attr("data-o-points"));
       });
-      $("#subdivision").html("Overall");
+      $("#subdivision").html("Combined");
 
     } else {
       $.each(rows, function(index, row) {

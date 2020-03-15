@@ -28,7 +28,7 @@ custom_colors: true
     <div class="tournament-info">
       <h1>
         <%= i.tournament.year %>
-        <%= tournament_title(i.tournament) %>&nbsp;(Div. <%= i.tournament.division %><%= '-<span id="subdivision">Overall</span>' if i.tournament.subdivisions? %>)
+        <%= tournament_title(i.tournament) %>&nbsp;(Div. <%= i.tournament.division %><%= ' <span id="subdivision">Combined</span>' if i.tournament.subdivisions? %>)
       </h1>
       <p><%= i.tournament.date.strftime('%A, %B %-d, %Y') %>
          @ <span style="white-space: nowrap;"><%= i.tournament.location %></span></p>
@@ -239,9 +239,9 @@ custom_colors: true
       <% if i.tournament.subdivisions? %>
         <h6>Select which subdivision to show</h6>
         <div>
-          <input type="radio" id="sub-overall" name="subdivision" checked>
-          <label class="custom-control-label" for="sub-overall">
-            Overall (combined)
+          <input type="radio" id="sub-combined" name="subdivision" checked>
+          <label class="custom-control-label" for="sub-combined">
+            Combined (all subdivisions)
           </label>
         </div>
       <% i.tournament.subdivisions.each do |s, _| %>
@@ -405,7 +405,7 @@ custom_colors: true
       <div class="modal-body">
         <h6>Summary</h6>
         <p><span id="team">[team]</span> placed <span id="place">[place]</span>
-        with a total score of <span id="points">[points]</span> points.
+        overall with a total score of <span id="points">[points]</span> points.
         <hr>
         <div class="table-responsive-md">
         <table class="table-striped">
