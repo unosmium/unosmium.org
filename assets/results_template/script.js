@@ -231,6 +231,7 @@ $(document).ready(function(){
   });
 
   // Filter and toggle displayed data based on subdivision radio buttons
+  if (document.getElementById("subdivision") !== null) {
   let filter_subdivision = function() {
     let sub = $("input[type=radio][name=subdivision]:checked").attr("id").substring(4);
     let rows = $("tr[data-subdivision]");
@@ -284,6 +285,7 @@ $(document).ready(function(){
   };
   $("input[type=radio][name=subdivision]").change(filter_subdivision);
   filter_subdivision();
+  }
 
   // Toggle rows based on checkboxes
   $("div#team-filter input").change(function() {
