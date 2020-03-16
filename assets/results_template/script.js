@@ -363,6 +363,7 @@ $(document).ready(function(){
     let table_rows = $("div#team-detail table tbody").children();
     $.each(source_row.children("td.event-points"), function (index, td) {
       let dest_row = table_rows.eq(index);
+      dest_row.attr("data-points", $(td).attr("data-points"));
       dest_row.children().eq(1).html($(td).attr("data-true-points"));
       let data_place = $(td).attr("data-place");
       let place = data_place === "" ? "n/a" : getOrdinal(data_place);
