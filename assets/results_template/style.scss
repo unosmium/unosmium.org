@@ -345,7 +345,7 @@ div#team-detail {
     width: 1em;
 
     border-collapse: separate;
-    border-spacing: 0 0.75ex;
+    border-spacing: 0 0.5ex;
 
     @include media-breakpoint-down(xs) {
       font-size: 0.8em;
@@ -366,11 +366,11 @@ div#team-detail {
     }
 
     tr td:first-child {
-      border-bottom-left-radius: 1em;
+      border-bottom-left-radius: 0.8em;
     }
 
     tbody tr td:last-child {
-      border-top-right-radius: 1em;
+      border-top-right-radius: 0.8em;
     }
 
     tr[data-points='1'],
