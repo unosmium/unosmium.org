@@ -1,3 +1,10 @@
+This is the old design before migration to custom Rust-based generator.
+
+Will probably still be viewable here:
+https://5ef93ad106d3b43312c5b13d--unosmium.netlify.app/results/
+
+---
+
 # Unosmium Website
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ff03ce31-0235-4742-b95e-389ec3ebb96a/deploy-status)](https://app.netlify.com/sites/unosmium/deploys)
