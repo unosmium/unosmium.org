@@ -1,9 +1,2 @@
-.bundle
-.cache
-.DS_Store
-.sass-cache
-.netlify
-build/
-node_modules/
-.tmp/
-ztestscript*
+/target
+/public/results

@@ -1,7 +1,7 @@
 [build]
 base = "./"
-command = "bundle exec middleman build"
-publish = "./build"
+command = "cargo run"
+publish = "./public"
 
 [build.processing]
   skip_processing = false
@@ -15,8 +15,3 @@ from = "https://unosmium.netlify.com/*"
 to = "https://unosmium.org/:splat"
 status = 301
 force = true
-
-[[redirects]]
-from = "/"
-to = "/results/"
-status = 302
