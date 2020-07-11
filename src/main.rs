@@ -39,8 +39,8 @@ fn get_tournament_info() -> io::Result<Vec<Tournament>> {
         let yaml = fs::read_to_string(&path)?;
         let interpreter = Interpreter::from_yaml(&yaml);
         let source_file_name = path.file_name().unwrap().to_os_string();
-        let logo_path = get_logo_path(&source_file_name, &logo_info)?;
-        let theme_color = get_theme_color(&logo_path);
+        let (logo_path, theme_color) =
+            get_logo_path_and_color(&source_file_name, &logo_info)?;
 
         tournaments.push(Tournament {
             interpreter,
@@ -58,6 +58,7 @@ struct Logo {
     division: Option<String>,
     minimum_year: u32,
     path: PathBuf,
+    theme_color: String,
 }
 
 fn get_logo_info() -> io::Result<HashMap<String, Vec<Logo>>> {
@@ -87,12 +88,14 @@ fn get_logo_info() -> io::Result<HashMap<String, Vec<Logo>>> {
                 splits[start_index..splits.len()].join("_").to_string(),
             )
         };
+        let theme_color = get_theme_color(&path);
 
         let entry = logo_info.entry(tournament_name).or_insert_with(Vec::new);
         entry.push(Logo {
             division,
             minimum_year,
             path,
+            theme_color,
         });
     }
 
@@ -104,11 +107,12 @@ fn get_logo_info() -> io::Result<HashMap<String, Vec<Logo>>> {
     Ok(logo_info)
 }
 
-fn get_logo_path(
+fn get_logo_path_and_color(
     source_file_name: &OsStr,
     logo_info: &HashMap<String, Vec<Logo>>,
-) -> io::Result<PathBuf> {
+) -> io::Result<(PathBuf, String)> {
     let default_logo_path = PathBuf::from("public/results/logos/default.png");
+    let default_theme_color = "#303030".to_string();
 
     let source_file_str = source_file_name
         .to_str()
@@ -123,21 +127,21 @@ fn get_logo_path(
     let division = splits[0].splitn(2, '.').collect::<Vec<_>>()[0];
     let tournament_name = splits[1];
 
-    let logo_path = match logo_info.get(tournament_name) {
+    let logo_path_and_color = match logo_info.get(tournament_name) {
         Some(logos) => {
             match logos.iter().find(|logo| {
                 (logo.division.is_none()
                     || logo.division.as_ref().unwrap() == division)
                     && logo.minimum_year <= year
             }) {
-                Some(logo) => logo.path.clone(),
-                None => default_logo_path,
+                Some(logo) => (logo.path.clone(), logo.theme_color.clone()),
+                None => (default_logo_path, default_theme_color),
             }
         }
-        None => default_logo_path,
+        None => (default_logo_path, default_theme_color),
     };
 
-    Ok(logo_path)
+    Ok(logo_path_and_color)
 }
 
 fn get_theme_color(logo_path: &Path) -> String {
