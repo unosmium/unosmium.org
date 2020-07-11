@@ -1,3 +1,8 @@
+use contrast::contrast;
+use css_colors::{percent, Color};
+use image::imageops;
+use image::imageops::FilterType;
+use rgb::RGB8;
 use sciolyff::interpreter::{html::HTMLOptions, Interpreter};
 use std::{
     collections::HashMap,
@@ -35,7 +40,7 @@ fn get_tournament_info() -> io::Result<Vec<Tournament>> {
         let interpreter = Interpreter::from_yaml(&yaml);
         let source_file_name = path.file_name().unwrap().to_os_string();
         let logo_path = get_logo_path(&source_file_name, &logo_info)?;
-        let theme_color = get_theme_color(&logo_path)?;
+        let theme_color = get_theme_color(&logo_path);
 
         tournaments.push(Tournament {
             interpreter,
@@ -135,10 +140,28 @@ fn get_logo_path(
     Ok(logo_path)
 }
 
-fn get_theme_color(logo_path: &Path) -> io::Result<String> {
-    let theme_color = "#303030".to_string();
+fn get_theme_color(logo_path: &Path) -> String {
+    let pixel = match image::open(logo_path) {
+        Ok(image) => {
+            imageops::resize(&image.into_rgb(), 1, 1, FilterType::Triangle)
+                .into_raw()
+        }
+        // SVGs
+        Err(_) => vec![48, 48, 48],
+    };
 
-    Ok(theme_color)
+    let mut color = css_colors::rgb(pixel[0], pixel[1], pixel[2]);
+    let text_color = RGB8::new(255, 255, 255);
+
+    while contrast::<_, f32>(
+        RGB8::new(color.r.as_u8(), color.g.as_u8(), color.b.as_u8()),
+        text_color,
+    ) < 7.0
+    {
+        color = color.darken(percent(1));
+    }
+
+    color.to_css()
 }
 
 fn write_results_pages(tournaments: &[Tournament]) -> io::Result<()> {

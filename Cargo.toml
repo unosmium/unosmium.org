@@ -8,3 +8,8 @@ edition = "2018"
 
 [dependencies]
 sciolyff = { git = "https://github.com/unosmium/sciolyff-rust" }
+image = "0.23.6"
+palette = "0.5.0"
+css-colors = "1.0.1"
+contrast = "0.1.0"
+rgb = "0.8.20"
