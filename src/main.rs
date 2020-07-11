@@ -83,7 +83,7 @@ fn get_logo_info() -> io::Result<HashMap<String, Vec<Logo>>> {
             )
         };
 
-        let entry = logo_info.entry(tournament_name).or_insert(Vec::new());
+        let entry = logo_info.entry(tournament_name).or_insert_with(Vec::new);
         entry.push(Logo {
             division,
             minimum_year,
@@ -91,7 +91,7 @@ fn get_logo_info() -> io::Result<HashMap<String, Vec<Logo>>> {
         });
     }
 
-    for (_, logos) in &mut logo_info {
+    for logos in logo_info.values_mut() {
         logos.sort();
         logos.reverse();
     }
@@ -141,7 +141,7 @@ fn get_theme_color(logo_path: &Path) -> io::Result<String> {
     Ok(theme_color)
 }
 
-fn write_results_pages(tournaments: &Vec<Tournament>) -> io::Result<()> {
+fn write_results_pages(tournaments: &[Tournament]) -> io::Result<()> {
     fs::create_dir_all("public/results")?;
 
     for tournament in tournaments {
