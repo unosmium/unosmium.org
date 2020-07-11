@@ -1,7 +1,8 @@
 use contrast::contrast;
 use css_colors::{percent, Color};
-use image::imageops;
 use image::imageops::FilterType;
+use image::{imageops, ImageBuffer};
+use resvg;
 use rgb::RGB8;
 use sciolyff::interpreter::{html::HTMLOptions, Interpreter};
 use std::{
@@ -11,6 +12,7 @@ use std::{
     fs, io,
     path::{Path, PathBuf},
 };
+use usvg::{FitTo, Options, Tree};
 
 fn main() -> io::Result<()> {
     let tournaments = get_tournament_info()?;
@@ -145,14 +147,19 @@ fn get_logo_path_and_color(
 }
 
 fn get_theme_color(logo_path: &Path) -> String {
-    let pixel = match image::open(logo_path) {
-        Ok(image) => {
-            imageops::resize(&image.into_rgb(), 1, 1, FilterType::Triangle)
-                .into_raw()
-        }
-        // SVGs
-        Err(_) => vec![48, 48, 48],
+    let image = if logo_path.extension().unwrap() == "svg" {
+        let svg = resvg::render(
+            &Tree::from_file(logo_path, &Options::default()).unwrap(),
+            FitTo::Original,
+            None,
+        )
+        .unwrap();
+        ImageBuffer::from_vec(svg.width(), svg.height(), svg.take()).unwrap()
+    } else {
+        image::open(logo_path).unwrap().into_rgba()
     };
+
+    let pixel = imageops::resize(&image, 1, 1, FilterType::Triangle).into_raw();
 
     let mut color = css_colors::rgb(pixel[0], pixel[1], pixel[2]);
     let text_color = RGB8::new(255, 255, 255);
