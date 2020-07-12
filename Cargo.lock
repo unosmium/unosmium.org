@@ -1281,6 +1281,7 @@ dependencies = [
  "resvg",
  "rgb",
  "sciolyff",
+ "time",
  "usvg",
 ]
 

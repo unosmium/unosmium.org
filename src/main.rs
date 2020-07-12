@@ -11,7 +11,9 @@ use std::{
     ffi::{OsStr, OsString},
     fs, io,
     path::{Path, PathBuf},
+    process::Command,
 };
+use time::{date, OffsetDateTime};
 use usvg::{FitTo, Options, Tree};
 
 fn main() -> io::Result<()> {
@@ -24,6 +26,7 @@ fn main() -> io::Result<()> {
 struct Tournament {
     interpreter: Interpreter,
     source_file_name: OsString,
+    date_added: OffsetDateTime,
     logo_path: PathBuf,
     theme_color: String,
 }
@@ -41,18 +44,56 @@ fn get_tournament_info() -> io::Result<Vec<Tournament>> {
         let yaml = fs::read_to_string(&path)?;
         let interpreter = Interpreter::from_yaml(&yaml);
         let source_file_name = path.file_name().unwrap().to_os_string();
+        let date_added = get_date_added(&source_file_name)?;
         let (logo_path, theme_color) =
             get_logo_path_and_color(&source_file_name, &logo_info)?;
 
         tournaments.push(Tournament {
             interpreter,
             source_file_name,
+            date_added,
             logo_path,
             theme_color,
         });
     }
 
     Ok(tournaments)
+}
+
+fn get_date_added(source_file_name: &OsStr) -> io::Result<OffsetDateTime> {
+    let mut path: PathBuf =
+        [OsStr::new("results"), source_file_name].iter().collect();
+    let mut date = get_date_from_git(&path)?;
+
+    // results were moved from data to results directory
+    if date.date() < date!(2020 - 07 - 08) {
+        path = [OsStr::new("data"), source_file_name].iter().collect();
+        date = get_date_from_git(&path)?;
+    }
+
+    Ok(date)
+}
+
+fn get_date_from_git(source_file_path: &Path) -> io::Result<OffsetDateTime> {
+    let output = Command::new("git")
+        .arg("log")
+        .arg("--format=%ai")
+        .arg("--reverse")
+        .arg("--")
+        .arg(source_file_path)
+        .output()?;
+    let date_string = String::from_utf8(output.stdout).unwrap();
+
+    if let Ok(date) = OffsetDateTime::parse(&date_string, "%F %T %z") {
+        Ok(date)
+    } else {
+        println!(
+            "Warning: {} not found in git tree; \
+            using current time as date added",
+            source_file_path.display()
+        );
+        Ok(OffsetDateTime::now_local())
+    }
 }
 
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
