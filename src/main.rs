@@ -16,11 +16,9 @@ use std::{
 use time::{date, OffsetDateTime};
 use usvg::{FitTo, Options, Tree};
 
-fn main() -> io::Result<()> {
-    let tournaments_results = get_tournament_info()?;
-    write_result_pages(&tournaments_results)?;
-
-    Ok(())
+fn main() {
+    let tournaments_results = get_tournament_info();
+    write_result_pages(&tournaments_results);
 }
 
 struct TournamentResult {
@@ -31,24 +29,27 @@ struct TournamentResult {
     theme_color: String,
 }
 
-fn get_tournament_info() -> io::Result<Vec<TournamentResult>> {
+fn get_tournament_info() -> Vec<TournamentResult> {
     let mut tournaments = Vec::new();
 
-    let entries = fs::read_dir("results")?;
-    let logo_info = get_logo_info()?;
+    let entries = fs::read_dir("results").expect("could not read results dir");
+    let logo_info = get_logo_info().expect("could not get logo info");
     for entry in entries {
-        let path = entry?.path();
+        let path = entry.unwrap().path();
         if !path.is_file() {
             continue;
         }
         println!("Parsing info for {:?}...", path);
 
-        let yaml = fs::read_to_string(&path)?;
+        let yaml = fs::read_to_string(&path)
+            .expect(&format!("could not read file at {:?}", path));
         let interpreter = Interpreter::from_yaml(&yaml);
         let source_file_name = path.file_name().unwrap().to_os_string();
-        let date_added = get_date_added(&source_file_name)?;
+        let date_added = get_date_added(&source_file_name)
+            .expect("could not get date added from git");
         let (logo_path, theme_color) =
-            get_logo_path_and_color(&source_file_name, &logo_info)?;
+            get_logo_path_and_color(&source_file_name, &logo_info)
+            .expect("could not find matching logo");
 
         tournaments.push(TournamentResult {
             interpreter,
@@ -62,7 +63,7 @@ fn get_tournament_info() -> io::Result<Vec<TournamentResult>> {
     println!("------------------------------------------------------------");
     println!("Parsing complete.");
     println!("------------------------------------------------------------");
-    Ok(tournaments)
+    tournaments
 }
 
 fn get_date_added(source_file_name: &OsStr) -> io::Result<OffsetDateTime> {
@@ -221,8 +222,8 @@ fn get_theme_color(logo_path: &Path) -> String {
     color.to_css()
 }
 
-fn write_result_pages(tournaments: &[TournamentResult]) -> io::Result<()> {
-    fs::create_dir_all("public/results")?;
+fn write_result_pages(tournaments: &[TournamentResult]) {
+    fs::create_dir_all("public/results").expect("could not create results dir");
 
     for tournament in tournaments {
         let mut path = PathBuf::from("public/results");
@@ -231,16 +232,16 @@ fn write_result_pages(tournaments: &[TournamentResult]) -> io::Result<()> {
 
         println!("Writing to {:?}...", path);
         fs::write(
-            path,
+            &path,
             tournament.interpreter.to_html(&HTMLOptions {
                 color: tournament.theme_color.clone(),
                 ..Default::default()
             }),
-        )?;
+        )
+        .expect(&format!("could not write to path {:?}", path));
     }
 
     println!("------------------------------------------------------------");
     println!("Results pages complete.");
     println!("------------------------------------------------------------");
-    Ok(())
 }
