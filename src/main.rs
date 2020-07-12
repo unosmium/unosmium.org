@@ -17,13 +17,13 @@ use time::{date, OffsetDateTime};
 use usvg::{FitTo, Options, Tree};
 
 fn main() -> io::Result<()> {
-    let tournaments = get_tournament_info()?;
-    write_results_pages(&tournaments)?;
+    let tournaments_results = get_tournament_info()?;
+    write_result_pages(&tournaments_results)?;
 
     Ok(())
 }
 
-struct Tournament {
+struct TournamentResult {
     interpreter: Interpreter,
     source_file_name: OsString,
     date_added: OffsetDateTime,
@@ -31,7 +31,7 @@ struct Tournament {
     theme_color: String,
 }
 
-fn get_tournament_info() -> io::Result<Vec<Tournament>> {
+fn get_tournament_info() -> io::Result<Vec<TournamentResult>> {
     let mut tournaments = Vec::new();
 
     let entries = fs::read_dir("results")?;
@@ -50,7 +50,7 @@ fn get_tournament_info() -> io::Result<Vec<Tournament>> {
         let (logo_path, theme_color) =
             get_logo_path_and_color(&source_file_name, &logo_info)?;
 
-        tournaments.push(Tournament {
+        tournaments.push(TournamentResult {
             interpreter,
             source_file_name,
             date_added,
@@ -221,7 +221,7 @@ fn get_theme_color(logo_path: &Path) -> String {
     color.to_css()
 }
 
-fn write_results_pages(tournaments: &[Tournament]) -> io::Result<()> {
+fn write_result_pages(tournaments: &[TournamentResult]) -> io::Result<()> {
     fs::create_dir_all("public/results")?;
 
     for tournament in tournaments {
