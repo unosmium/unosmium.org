@@ -41,6 +41,8 @@ fn get_tournament_info() -> io::Result<Vec<Tournament>> {
         if !path.is_file() {
             continue;
         }
+        println!("Parsing info for {:?}...", path);
+
         let yaml = fs::read_to_string(&path)?;
         let interpreter = Interpreter::from_yaml(&yaml);
         let source_file_name = path.file_name().unwrap().to_os_string();
@@ -57,6 +59,9 @@ fn get_tournament_info() -> io::Result<Vec<Tournament>> {
         });
     }
 
+    println!("------------------------------------------------------------");
+    println!("Parsing complete.");
+    println!("------------------------------------------------------------");
     Ok(tournaments)
 }
 
@@ -224,6 +229,7 @@ fn write_results_pages(tournaments: &[Tournament]) -> io::Result<()> {
         path.push(&tournament.source_file_name);
         path.set_extension("html");
 
+        println!("Writing to {:?}...", path);
         fs::write(
             path,
             tournament.interpreter.to_html(&HTMLOptions {
@@ -233,5 +239,8 @@ fn write_results_pages(tournaments: &[Tournament]) -> io::Result<()> {
         )?;
     }
 
+    println!("------------------------------------------------------------");
+    println!("Results pages complete.");
+    println!("------------------------------------------------------------");
     Ok(())
 }
