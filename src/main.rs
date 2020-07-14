@@ -1,12 +1,13 @@
 use contrast::contrast;
 use css_colors::{percent, Color};
+use csv::Writer;
 use image::imageops::FilterType;
 use image::{imageops, ImageBuffer};
 use resvg;
 use rgb::RGB8;
 use sciolyff::interpreter::{html::HTMLOptions, Interpreter};
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     default::Default,
     ffi::{OsStr, OsString},
     fs, io,
@@ -17,8 +18,12 @@ use time::{date, OffsetDateTime};
 use usvg::{FitTo, Options, Tree};
 
 fn main() {
-    let tournaments_results = get_tournament_info();
-    write_result_pages(&tournaments_results);
+    let tournament_results = get_tournament_info();
+
+    fs::create_dir_all("public/results").expect("could not create results dir");
+
+    write_result_pages(&tournament_results);
+    write_cannonical_events_and_schools(&tournament_results)
 }
 
 struct TournamentResult {
@@ -49,7 +54,7 @@ fn get_tournament_info() -> Vec<TournamentResult> {
             .expect("could not get date added from git");
         let (logo_path, theme_color) =
             get_logo_path_and_color(&source_file_name, &logo_info)
-            .expect("could not find matching logo");
+                .expect("could not find matching logo");
 
         tournaments.push(TournamentResult {
             interpreter,
@@ -223,8 +228,6 @@ fn get_theme_color(logo_path: &Path) -> String {
 }
 
 fn write_result_pages(tournaments: &[TournamentResult]) {
-    fs::create_dir_all("public/results").expect("could not create results dir");
-
     for tournament in tournaments {
         let mut path = PathBuf::from("public/results");
         path.push(&tournament.source_file_name);
@@ -244,4 +247,63 @@ fn write_result_pages(tournaments: &[TournamentResult]) {
     println!("------------------------------------------------------------");
     println!("Results pages complete.");
     println!("------------------------------------------------------------");
+}
+
+fn write_cannonical_events_and_schools(tournaments: &[TournamentResult]) {
+    println!("Collecting cannonical event and school names...");
+
+    let mut cannonical_events = HashSet::new();
+    let mut cannonical_schools = HashSet::new();
+
+    for t in tournaments {
+        for event in t.interpreter.events().iter() {
+            cannonical_events.insert([event.name()]);
+        }
+        for team in t.interpreter.teams().iter() {
+            cannonical_schools.insert([
+                team.school(),
+                team.city().unwrap_or(""),
+                team.state(),
+            ]);
+        }
+    }
+
+    let mut events_list: Vec<_> = cannonical_events.drain().collect();
+    let mut schools_list: Vec<_> = cannonical_schools.drain().collect();
+
+    events_list.sort();
+    schools_list.sort();
+
+    write_csv_1("public/results/events.csv", events_list);
+    write_csv_3("public/results/schools.csv", schools_list);
+
+    println!("------------------------------------------------------------");
+    println!("Cannonical names CSV pages complete.");
+    println!("------------------------------------------------------------");
+}
+
+// following two fns can be merged once Rust better supports generic array sizes
+
+fn write_csv_1(path: &str, records: Vec<[&str; 1]>) {
+    println!("Writing to {:?}...", path);
+    let mut csv_writer =
+        Writer::from_path(path).expect(&format!("could not create {}", path));
+
+    for r in records {
+        csv_writer
+            .write_record(&r)
+            .expect(&format!("failed writing to {}", path));
+    }
+}
+
+fn write_csv_3(path: &str, records: Vec<[&str; 3]>) {
+    println!("Writing to {:?}...", path);
+    let mut csv_writer =
+        Writer::from_path(path).expect(&format!("could not create {}", path));
+
+    for r in records {
+        csv_writer
+            .write_record(&r)
+            .expect(&format!("failed writing to {}", path));
+    }
 }
