@@ -17,13 +17,18 @@ use std::{
 use time::{date, OffsetDateTime};
 use usvg::{FitTo, Options, Tree};
 
+use lazy_static::lazy_static;
+use serde::Serialize;
+use tera::{Context, Tera};
+
 fn main() {
     let tournament_results = get_tournament_info();
 
     fs::create_dir_all("public/results").expect("could not create results dir");
 
     write_result_pages(&tournament_results);
-    write_cannonical_events_and_schools(&tournament_results)
+    write_cannonical_events_and_schools(&tournament_results);
+    write_results_index(&tournament_results);
 }
 
 struct TournamentResult {
@@ -306,4 +311,18 @@ fn write_csv_3(path: &str, records: Vec<[&str; 3]>) {
             .write_record(&r)
             .expect(&format!("failed writing to {}", path));
     }
+}
+
+lazy_static! {
+    static ref TEMPLATES: Tera = Tera::new("src/templates/*").unwrap();
+}
+
+fn write_results_index(tournaments: &[TournamentResult]) {
+    let path = PathBuf::from("public/results/index.html");
+    println!("Writing to {:?}...", path);
+
+    let context = Context::new();
+
+    fs::write(&path, TEMPLATES.render("results_index.html", &context).unwrap())
+        .expect(&format!("could not write to path {:?}", path));
 }

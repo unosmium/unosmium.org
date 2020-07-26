@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" version="1.1" viewBox="0 0 8.4667 8.4667" xmlns="http://www.w3.org/2000/svg">
+ <style>
+ @media (prefers-color-scheme: dark) {
+  rect { fill: grey; }
+ }
+ </style>
+ <g>
+  <rect x="1.0527" y="2.5547" width="2.1204" height="5.3011" stroke-width=".33144"/>
+  <rect x="5.2935" y=".61094" width="2.1204" height="5.3011" stroke-width=".3296"/>
+  <ellipse cx="4.5867" cy="6.4421" rx="2.8272" ry="1.4136" fill="#ffee58" stroke-width=".37961"/>
+  <circle cx="2.4663" cy="2.0246" r="1.4136" fill="#cfd8dc" stroke-width=".49646"/>
+ </g>
+</svg>
