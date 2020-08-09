@@ -327,6 +327,9 @@ fn write_results_index(tournaments: &[TournamentResult]) {
 
     let context = Context::new();
 
-    fs::write(&path, TEMPLATES.render("results_index.html", &context).unwrap())
-        .expect(&format!("could not write to path {:?}", path));
+    fs::write(
+        &path,
+        TEMPLATES.render("results_index.html", &context).unwrap(),
+    )
+    .expect(&format!("could not write to path {:?}", path));
 }
