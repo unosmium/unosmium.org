@@ -90,6 +90,10 @@ fn get_date_added(source_file_name: &OsStr) -> io::Result<OffsetDateTime> {
     Ok(date)
 }
 
+lazy_static! {
+    static ref NOW: OffsetDateTime = OffsetDateTime::now_local();
+}
+
 fn get_date_from_git(source_file_path: &Path) -> io::Result<OffsetDateTime> {
     let output = Command::new("git")
         .arg("log")
@@ -108,7 +112,7 @@ fn get_date_from_git(source_file_path: &Path) -> io::Result<OffsetDateTime> {
             using current time as date added",
             source_file_path.display()
         );
-        Ok(OffsetDateTime::now_local())
+        Ok(*NOW)
     }
 }
 
