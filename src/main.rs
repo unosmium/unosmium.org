@@ -242,11 +242,20 @@ fn write_result_pages(tournaments: &[TournamentResult]) {
         path.push(&tournament.source_file_name);
         path.set_extension("html");
 
+        let mut url = PathBuf::from("https://unosmium.org/results");
+        url.push(&tournament.source_file_name);
+        url.set_extension("html");
+
+        let mut image = PathBuf::from("https://unosmium.org/results/logos");
+        image.push(tournament.logo_path.file_name().unwrap());
+
         println!("Writing to {:?}...", path);
         fs::write(
             &path,
             tournament.interpreter.to_html(&HTMLOptions {
                 color: tournament.theme_color.clone(),
+                image: image.to_str().map(String::from).unwrap(),
+                cannonical_url: url.to_str().map(String::from),
                 ..Default::default()
             }),
         )
