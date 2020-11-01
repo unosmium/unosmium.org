@@ -47,6 +47,12 @@ manifest: /results/manifest.json
 <div class="container" id="hide-on-search">
 <div class="row mt-3 pb-5 mb-5">
 <div class="col-md-8">
+  <h4>Hiatus Note</h4>
+  <p>
+    This site has been on hiatus since July 2020. In the meantime, please visit
+    <a href="https://unosmium.smayya.me/results/">unosmium.smayya.me</a> for
+    up-to-date results! We hope to return soon.
+  </p>
   <h4>Upcoming</h4>
 <% data.upcoming.group_by(&:date).sort.each do |date, tournaments| %>
   <% next if Date.today >= date %>
