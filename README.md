@@ -5,7 +5,7 @@
 The official website for the Unosmium Scoring System and Unosmium Results.
 
 Currently on hiatus; please see
-[smayya337/unosmium.org](https://github.com/smayya337/unosmium.org) for a
+[Duosmium/duosmium](https://github.com/Duosmium/duosmium) for a
 maintained version. We hope to return soon.
 
 Visit: [https://unosmium.org/](https://unosmium.org/)
